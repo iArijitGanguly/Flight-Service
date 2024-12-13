@@ -1,12 +1,12 @@
 import { FastifyInstance } from 'fastify';
 
+import { airplaneZodSchema } from '../../dtos/AirplaneDto';
+import { validator } from '../../validators/validateRequest';
+
 async function airplaneRoute(fastify: FastifyInstance) {
-    fastify.get('/', (_req, res) => {
-        res.send({
-            success: true,
-            data: 'Alive'
-        });
-    });
+    fastify.post('/', {
+        preValidation: validator(airplaneZodSchema),
+    }, () => {});
 }
 
 export default airplaneRoute;
