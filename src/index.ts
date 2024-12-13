@@ -1,5 +1,6 @@
 import Fastify from 'fastify';
 
+import app from './app';
 import db from './configs/dbConfig';
 import logger from './configs/loggerConfig';
 import serverConfig from './configs/serverConfig';
@@ -7,6 +8,8 @@ import serverConfig from './configs/serverConfig';
 const { PORT } = serverConfig;
 
 const fastify = Fastify();
+
+fastify.register(app);
 
 fastify.listen({ port: PORT }, async (err) => {
     if(err) {
