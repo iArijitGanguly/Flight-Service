@@ -4,7 +4,7 @@ import BaseError from './BaseError';
 
 class NotFoundError extends BaseError {
     constructor(resourceName: string, resourceValue: string) {
-        super('Resource Not Found', StatusCodes.NOT_FOUND, `The requested resource: ${resourceName} with value ${resourceValue} is not found`, {
+        super('Resource Not Found', StatusCodes.NOT_FOUND, 'Not able to find the resource', {
             resourceName,
             resourceValue
         });

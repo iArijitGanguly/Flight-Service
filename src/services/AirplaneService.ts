@@ -1,8 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
 
-import { AirplaneDto } from '../dtos/AirplaneDto';
-import BaseError from '../errors/BaseError';
+import { CreateAirplaneDto, UpdateAirplaneDto } from '../dtos/AirplaneDto';
+import BadRequestError from '../errors/BadRequestError';
 import InternalServerError from '../errors/InternalServerError';
+import NotFoundError from '../errors/NotFoundError';
 import AirplaneRepository from '../repositories/AirplaneRepository';
 
 class AirplaneService {
@@ -12,7 +13,7 @@ class AirplaneService {
         this.airplaneRepository = airplaneRepository;
     }
 
-    async createAirplane(data: AirplaneDto) {
+    async createAirplane(data: CreateAirplaneDto) {
         try {
             const airplane = await this.airplaneRepository.create(data);
             return airplane;
@@ -35,9 +36,39 @@ class AirplaneService {
             const airplane = await this.airplaneRepository.get(id);
             return airplane;
         } catch (error) {
-            const err = error as BaseError;
+            const err = error as NotFoundError;
             if(err.statusCode == StatusCodes.NOT_FOUND) {
-                throw new BaseError(err.name, err.statusCode, 'Can not fetch data of airplane', err);
+                throw err;
+            }
+            throw new InternalServerError('Can not fetch data of airplane', error);
+        }
+    }
+
+    async updateAirplane(id: string, data: UpdateAirplaneDto) {
+        if(Object.keys(data).length == 0) {
+            throw new BadRequestError('Updated data is not provided', data);
+        }
+        
+        try {
+            const airplane = await this.airplaneRepository.update(id, data);
+            return airplane;
+        } catch (error) {
+            const err = error as NotFoundError;
+            if(err.statusCode == StatusCodes.NOT_FOUND) {
+                throw err;
+            }
+            throw new InternalServerError('Can not fetch data of airplane', error);
+        }
+    }
+
+    async deleteAirplane(id: string) {
+        try {
+            const airplane = await this.airplaneRepository.destroy(id);
+            return airplane;
+        } catch (error) {
+            const err = error as NotFoundError;
+            if(err.statusCode == StatusCodes.NOT_FOUND) {
+                throw err;
             }
             throw new InternalServerError('Can not fetch data of airplane', error);
         }

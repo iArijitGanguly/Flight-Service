@@ -33,7 +33,12 @@ class CrudRepository {
     }
 
     async update(id: string, data: DeepPartial<ObjectLiteral>) {
-        await this.repository.update(id, data);
+        const updatedData = await this.repository.update(id, data);
+
+        if(updatedData.affected == 0) {
+            throw new NotFoundError('Id', id);
+        }
+        
         const response = await this.repository.findOne({
             where: { id }
         });
@@ -41,13 +46,13 @@ class CrudRepository {
         return response;
     }
 
-    async Destroy(id: string) {
+    async destroy(id: string) {
         const response = await this.repository.findOne({
             where: { id }
         });
 
         if(!response) {
-            throw new NotFoundError('Primary Key', id);
+            throw new NotFoundError('Id', id);
         }
 
         await this.repository.delete(id);
