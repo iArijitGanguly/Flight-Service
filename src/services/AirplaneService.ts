@@ -18,7 +18,7 @@ class AirplaneService {
             const airplane = await this.airplaneRepository.create(data);
             return airplane;
         } catch (error) {
-            throw new InternalServerError('Cannot create a new Airplance object', error);
+            throw new InternalServerError('Can not create a new Airplance object', error);
         }
     }
 

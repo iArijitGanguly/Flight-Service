@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 
 import airplaneController from '../../controllers/airplaneController';
-import { createAirplaneZodSchema, deleteAirplaneZodSchema, getAirplaneZodSchema, upadteAirplaneIdZodSchema, upadteAirplaneZodSchema } from '../../dtos/AirplaneDto';
+import { airplaneIdZodSchema, createAirplaneZodSchema, upadteAirplaneZodSchema } from '../../dtos/AirplaneDto';
 import { validator } from '../../validators/validateRequest';
 
 async function airplaneRoute(fastify: FastifyInstance) {
@@ -12,15 +12,15 @@ async function airplaneRoute(fastify: FastifyInstance) {
     fastify.get('/', airplaneController.getAirplanes);
 
     fastify.get('/:id', {
-        preValidation: validator({ params: getAirplaneZodSchema })
+        preValidation: validator({ params: airplaneIdZodSchema })
     }, airplaneController.getAirplane);
 
     fastify.patch('/:id', {
-        preValidation: validator({ body: upadteAirplaneZodSchema, params: upadteAirplaneIdZodSchema })
+        preValidation: validator({ body: upadteAirplaneZodSchema, params: airplaneIdZodSchema })
     }, airplaneController.updateAirplane);
 
     fastify.delete('/:id', {
-        preValidation: validator({ params: deleteAirplaneZodSchema })
+        preValidation: validator({ params: airplaneIdZodSchema })
     }, airplaneController.deleteAirplane);
 }
 
