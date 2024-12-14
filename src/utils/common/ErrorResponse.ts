@@ -1,4 +1,6 @@
-const ErrorResponse = {
+import { ResponseType } from '../../types/ResponseType';
+
+const ErrorResponse: ResponseType = {
     success: false,
     message: 'Something Went Wrong',
     data: {},

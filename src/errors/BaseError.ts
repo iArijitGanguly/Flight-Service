@@ -2,9 +2,9 @@ class BaseError extends Error {
     name: string;
     statusCode: number;
     description: string;
-    details: object;
+    details: unknown;
 
-    constructor(name: string, statusCode: number, description: string, details: object) {
+    constructor(name: string, statusCode: number, description: string, details: unknown) {
         super(description);
         this.name = name;
         this.statusCode = statusCode;
