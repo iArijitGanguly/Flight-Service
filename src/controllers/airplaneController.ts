@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { StatusCodes } from 'http-status-codes';
 
 import { AirplaneDto } from '../dtos/AirplaneDto';
+import { GetAirplaneIdParams } from '../types/GetAirplaneIdParams';
 import SuccessResponse from '../utils/common/SuccessResponse';
 
 async function createAirplane(this: FastifyInstance, req: FastifyRequest, res: FastifyReply) {
@@ -29,7 +30,18 @@ async function getAirplanes(this: FastifyInstance, _req: FastifyRequest, res: Fa
     }
 }
 
+async function getAirplane(this: FastifyInstance, req: FastifyRequest<{Params: GetAirplaneIdParams}>, res: FastifyReply) {
+    try {
+        const response = await this.airplaneService.getAirplane(req.params.id);
+        SuccessResponse.data = response;
+        return res.status(StatusCodes.OK).send(SuccessResponse);
+    } catch (error) {
+        throw error;
+    }
+}
+
 export default {
     createAirplane,
-    getAirplanes
+    getAirplanes,
+    getAirplane
 };

@@ -10,6 +10,8 @@ async function airplaneRoute(fastify: FastifyInstance) {
     }, airplaneController.createAirplane);
 
     fastify.get('/', airplaneController.getAirplanes);
+
+    fastify.get('/:id', airplaneController.getAirplane);
 }
 
 export default airplaneRoute;
