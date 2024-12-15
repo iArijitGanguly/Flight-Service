@@ -1,16 +1,23 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { StatusCodes } from 'http-status-codes';
+import { QueryFailedError } from 'typeorm';
 
 import { CityIdDto, CreateCityDto, UpdateCityDto } from '../dtos/CityDto';
+import BadRequestError from '../errors/BadRequestError';
 import SuccessResponse from '../utils/common/SuccessResponse';
 
 async function createCity(this: FastifyInstance, req: FastifyRequest, res: FastifyReply) {
+    const incomingRequest = req.body as CreateCityDto;
     try {
-        const incomingRequest = req.body as CreateCityDto;
         const response = await this.cityService.createCity(incomingRequest);
         SuccessResponse.data = response;
         return res.status(StatusCodes.CREATED).send(SuccessResponse);
     } catch (error) {
+        if(error instanceof QueryFailedError) {
+            if(error.driverError.code == process.env.UNIQUE_NAME_ERROR_CODE) {
+                throw new BadRequestError(`City Name ${incomingRequest.name} is already exists`, { name: incomingRequest.name });
+            }
+        }
         throw error;
     }
 }
