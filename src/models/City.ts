@@ -1,4 +1,6 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+
+import Airport from './Airport';
 
 @Entity({ name: 'cities' })
 class City extends BaseEntity {
@@ -13,6 +15,9 @@ class City extends BaseEntity {
     
     @UpdateDateColumn()
         updatedAt: Date;
+
+    @OneToMany(() => Airport, (airport) => airport.city, { cascade: true })
+        airports: Airport[];
 }
 
 export default City;
