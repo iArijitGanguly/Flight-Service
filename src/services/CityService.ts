@@ -32,7 +32,7 @@ class CityService {
 
     async getCity(id: string) {
         try {
-            const city = await this.cityRepository.get(id);
+            const city = await this.cityRepository.get(id, 'City Id');
             return city;
         } catch (error) {
             const err = error as NotFoundError;

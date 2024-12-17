@@ -8,6 +8,9 @@ class Flight extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
         id: string;
 
+    @Column()
+        flightNumber: string;
+
     @Column({ type: 'timestamp without time zone' })
         arrivalTime: Date;
     
@@ -34,11 +37,11 @@ class Flight extends BaseEntity {
         airplane: Airplane;
 
     @ManyToOne(() => Airport, (airport) => airport.departingFlights, { onDelete: 'CASCADE' })
-    @JoinColumn({ name: 'departureAirportId', referencedColumnName: 'code' })
+    @JoinColumn({ name: 'departureAirportCode', referencedColumnName: 'code' })
         departureAirport: Airport;
 
     @ManyToOne(() => Airport, (airport) => airport.arrivingFlights, { onDelete: 'CASCADE' })
-    @JoinColumn({ name: 'arrivalAirportId', referencedColumnName: 'code' })
+    @JoinColumn({ name: 'arrivalAirportCode', referencedColumnName: 'code' })
         arrivalAirport: Airport;
 }
 

@@ -5,10 +5,11 @@ import { ZodSchema } from 'zod';
 import logger from '../configs/loggerConfig';
 import ErrorResponse from '../utils/common/ErrorResponse';
 
-export const validator = (schema: { body?: ZodSchema<unknown>, params?: ZodSchema<unknown> }) => async (req: FastifyRequest, res: FastifyReply) => {
+export const validator = (schema: { body?: ZodSchema<unknown>, params?: ZodSchema<unknown>, query?: ZodSchema<unknown> }) => async (req: FastifyRequest, res: FastifyReply) => {
     try {
         schema.body?.parse(req.body);
         schema.params?.parse(req.params);
+        schema.query?.parse(req.query);
     } catch (error) {
         logger.error('Invalid Request Structure');
         ErrorResponse.message = 'Invalid Request Structure';

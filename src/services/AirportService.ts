@@ -18,7 +18,7 @@ class AirportService {
 
     async createAirport(data: CreateAirportDto) {
         try {
-            const city = await this.cityRepository.get(data.cityId);
+            const city = await this.cityRepository.get(data.cityId, 'City Id');
             const airport = await this.airportRepository.create({ ...data, city });
             return airport;
         } catch (error) {
@@ -37,7 +37,7 @@ class AirportService {
 
     async getAirport(id: string) {
         try {
-            const airport = await this.airportRepository.get(id);
+            const airport = await this.airportRepository.get(id, 'Airport Id');
             return airport;
         } catch (error) {
             const err = error as NotFoundError;

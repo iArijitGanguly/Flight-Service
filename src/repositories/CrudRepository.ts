@@ -20,13 +20,13 @@ class CrudRepository {
         return response;
     }
 
-    async get(id: string) {
+    async get(id: string, columnName: string) {
         const response = await this.repository.findOne({
             where: { id }
         });
 
         if(!response) {
-            throw new NotFoundError('Id', id);
+            throw new NotFoundError(columnName, id);
         }
 
         return response;

@@ -33,7 +33,7 @@ class AirplaneService {
 
     async getAirplane(id: string) {
         try {
-            const airplane = await this.airplaneRepository.get(id);
+            const airplane = await this.airplaneRepository.get(id, 'Airplane Id');
             return airplane;
         } catch (error) {
             const err = error as NotFoundError;
