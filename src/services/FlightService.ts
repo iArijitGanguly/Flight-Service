@@ -32,6 +32,9 @@ class FlightService {
             const flight = await this.flightRepository.create(requestObject);
             return flight;
         } catch (error) {
+            if(error instanceof NotFoundError) {
+                throw error;
+            }
             throw new InternalServerError('Cannot create a new Flight object', error);
         }
     }
@@ -90,6 +93,16 @@ class FlightService {
     }
 
     async getAllFlightsByFilter(query: FilterFlightDto) {
+        const filters = this.createFilters(query);
+        try {
+            const flights = await this.flightRepository.getAllFlightsByFilter(filters.customFilter, filters.sortFilter);
+            return flights;
+        } catch (error) {
+            throw new InternalServerError('Can not fetch data of all the flights', error);
+        }
+    }
+
+    private createFilters(query: FilterFlightDto) {
         const customFilter: QueryFilter = {};
         const sortFilter: OrderFilter = {};
         const endingTripTime = ' 23:59:59';
@@ -119,19 +132,14 @@ class FlightService {
             orderFilter.forEach(([key, order]) => sortFilter[key] = order as SortOrder);
         }
 
-        try {
-            const flights = await this.flightRepository.getAllFlightsByFilter(customFilter, sortFilter);
-            return flights;
-        } catch (error) {
-            throw new InternalServerError('Can not fetch data of all the flights', error);
-        }
+        return { customFilter, sortFilter };
     }
 
     private async buildRequestObject(data: UpdateFlightDto) {
         const updateRequestObject: Record<string, unknown> = {};
 
         if(data.airplaneId) {
-            updateRequestObject.airplane = await this.airplaneRepository.get(data.airplaneId, 'Airplane Id');
+            updateRequestObject.airplaneDetails = await this.airplaneRepository.get(data.airplaneId, 'Airplane Id');
         }
 
         if(data.arrivalAirportCode) {

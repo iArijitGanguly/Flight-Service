@@ -2,6 +2,7 @@ import { Max } from 'class-validator';
 import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 import Flight from './Flight';
+import Seat from './Seat';
 
 @Entity({ name: 'airplanes' })
 class Airplane extends BaseEntity {
@@ -21,8 +22,11 @@ class Airplane extends BaseEntity {
     @UpdateDateColumn()
         updatedAt: Date;
 
-    @OneToMany(() => Flight, (flight) => flight.airplane, { cascade: true })
+    @OneToMany(() => Flight, (flight) => flight.airplaneDetails, { cascade: true })
         flights: Flight[];
+
+    @OneToMany(() => Seat, (seat) => seat.airplaneDetails, { cascade: true })
+        seats: Seat[];
 }
 
 export default Airplane;

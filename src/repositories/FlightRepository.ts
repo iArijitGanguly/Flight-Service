@@ -10,7 +10,17 @@ class FlightRepository extends CrudRepository {
     async getAllFlightsByFilter(filter: QueryFilter, sortFilter: OrderFilter) {
         const response = await Flight.find({
             where: filter,
-            order: sortFilter
+            order: sortFilter,
+            relationLoadStrategy: 'join',
+            relations: {
+                airplaneDetails: true,
+                departureAirport: {
+                    city: true
+                },
+                arrivalAirport: {
+                    city: true
+                }
+            },
         });
 
         return response;

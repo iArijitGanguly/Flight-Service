@@ -33,8 +33,8 @@ class Flight extends BaseEntity {
         updatedAt: Date;
 
     @ManyToOne(() => Airplane, (airplane) => airplane.flights, { onDelete: 'CASCADE' })
-    @JoinColumn({ name: 'airplaneId'})
-        airplane: Airplane;
+    @JoinColumn({ name: 'airplaneId' })
+        airplaneDetails: Airplane;
 
     @ManyToOne(() => Airport, (airport) => airport.departingFlights, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'departureAirportCode', referencedColumnName: 'code' })
